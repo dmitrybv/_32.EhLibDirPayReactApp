@@ -1,0 +1,26 @@
+.dimmer
+{
+    background:#000;
+    opacity:0.0;
+    position:fixed; /* important to use fixed, not absolute */
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index:9999; /* may not be necessary */
+}
+
+.dimmer_show {
+  display: block !important;
+  animation: visibleKeyFr 0.3s forwards;   
+}
+
+@keyframes visibleKeyFr {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+ }
