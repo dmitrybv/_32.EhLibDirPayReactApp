@@ -220,6 +220,22 @@ export class MyFormValues {
 
   }
 
+  toJSON() {
+    return {
+      SoftLicenTypeID: this.SoftLicenTypeID, 
+      SoftLicenceTypeName: this.SoftLicenceTypeName, 
+      SoftLicenceTypeDescription: this.SoftLicenceTypeDescription,
+      SoftLicencePriceComment: this.SoftLicencePriceComment,
+      LicencePrice: this.LicencePrice,
+      PrevLicNumberIsNeeded: this.PrevLicNumberIsNeeded,
+      NumberOfLicenses: this.NumberOfLicenses,
+      OrderPrice: this.OrderPrice,
+      PaymentMethodID: this.PaymentMethodID,
+      PaymentMethodName: this.PaymentMethodName,
+      BuyerEntityID: this.BuyerEntityID,
+    }
+  }
+
 }
 
 export class GlobalStateType{

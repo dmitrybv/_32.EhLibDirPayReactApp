@@ -32,28 +32,31 @@ type SendMailApiData =
 
 function ObjectValueAsStringList(fromValues: MyFormValues): string {
   let res: string = "";
+  let sysValue = fromValues.toJSON();
 
-  for (const [key, value] of Object.entries(fromValues)) {
-    if (!key.startsWith("_"))
-    {
-      res = res + `[${key}]: '${value}' \n`;
-    }
+  for (const [key, value] of Object.entries(sysValue)) {
+    res = res + `[${key}]: '${value}' \n`;
+    // if (!key.startsWith("_"))
+    // {
+    //   res = res + `[${key}]: '${value}' \n`;
+    // }
   }
 
   return res;
 }
 
 function GetMailJSonText(fromValues: MyFormValues): string {
-  function replacer(this: any, key: string, value: any): any
-  {
-    if (key.startsWith("_")){
-      return undefined;
-    }
-    return value;
-  }
+  // function replacer(this: any, key: string, value: any): any
+  // {
+  //   if (key.startsWith("_")){
+  //     return undefined;
+  //   }
+  //   return value;
+  // }
 
-  let res: string = JSON.stringify(fromValues, replacer);
-  return res;
+  //let res: string = JSON.stringify(fromValues, replacer);
+  //return res;
+  return JSON.stringify(fromValues);
 }
 
 async function SendMail(formValues: MyFormValues) : Promise<string> {
@@ -85,7 +88,7 @@ async function SendMail(formValues: MyFormValues) : Promise<string> {
   if (isDevelopment)
     sendMailHost = "https://localhost:7095/";
   else
-    sendMailHost = "https://ehlibdirpaywebfrm.azurewebsites.net/";
+    sendMailHost = "https://ehlibdirpayblazorapp.azurewebsites.net/";
 
   let sendPath = sendMailHost + "api/sendmail";
 
