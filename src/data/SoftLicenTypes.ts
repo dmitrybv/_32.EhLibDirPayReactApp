@@ -14,7 +14,7 @@ export type LicenceType =
 export function GetSoftLicenceTypeByID(licenceTypeID: string): LicenceType
 {
   let licTyp: LicenceType | undefined = SoftLicenTypes.find(element => element.LicenceTypeID === licenceTypeID);
-  if (licTyp == undefined) {
+  if (licTyp === undefined) {
     throw new Error('function GetSoftLicenceTypeByID: licTyp == undefined ');
   } 
   else

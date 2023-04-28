@@ -1,6 +1,6 @@
 import { PaymentMethod, PaymentMethods } from "../data/PaymentMethods";
 import { BusinessEntities, BusinessEntity } from "../data/BusinessEntities";
-import { LicenceType, SoftLicenTypes, GetSoftLicenceTypeByID } from "../data/SoftLicenTypes";
+import { LicenceType, SoftLicenTypes } from "../data/SoftLicenTypes";
 
 export enum EditFormState { Edit, PreviewToPost, ShowResult, NewOrder };
 
@@ -83,7 +83,31 @@ export class MyFormValues {
 
   public PrevLicNumberIsNeeded: boolean = false;
 
-  private _numberOfLicenses: number = 0;
+  //numberOfLicenses As Str
+  private _numberOfLicensesAsStr: string = '1';
+  public get NumberOfLicensesAsStr(): string {
+    return this._numberOfLicensesAsStr;
+  }  
+  
+  public set NumberOfLicensesAsStr(value: string) {
+    if (this._numberOfLicensesAsStr !== value)
+    {
+       let result = parseInt(value);
+      // if (isNaN(result)) {
+      //   throw Error(`set NumberOfLicensesAsStr: "${value}" value is not an integer!`);   
+      // }
+
+      if (isNaN(result)) {
+        this.NumberOfLicenses = 0;
+        this._numberOfLicensesAsStr = value;
+      } else {
+        this.NumberOfLicenses = result;
+      }
+    }
+  }  
+
+  //numberOfLicenses As number
+  private _numberOfLicenses: number = 1;
 
   public get NumberOfLicenses(): number {
     return this._numberOfLicenses;
@@ -93,6 +117,7 @@ export class MyFormValues {
     if (this._numberOfLicenses !== value)
     {
       this._numberOfLicenses = value;
+      this._numberOfLicensesAsStr = value.toString();
       this.UpdateOrderPrice();
     }
   }  
@@ -200,6 +225,62 @@ export class MyFormValues {
 
   public BuyerLegalAddress: string = "";
 
+  //Данные пользователя лицензии
+
+  // Оформить лицензию на другое лицо или компанию
+  public BuyerForOtherEntity: boolean = false;
+  
+    //Данные покупателя
+    private _softUserEntityID: string = '';
+
+    public set SoftUserEntityID(value: string) {
+      if (this._softUserEntityID !== value)
+      {
+        this._softUserEntityID = value;
+        this.OnSoftUserEntityIDChanged();
+      }
+    }  
+  
+    public get SoftUserEntityID(): string {
+      return this._softUserEntityID;
+    }  
+  
+    private OnSoftUserEntityIDChanged()
+    {
+      let be: BusinessEntity | undefined = BusinessEntities.find(e => e.EntityID === this._softUserEntityID);
+      if (be === undefined) {
+        this.SoftUserEntityName = "";
+        //throw new Error('private OnPaymentMethodIDChanged: (pm == undefined) ');
+      } 
+      else
+      {
+        this.SoftUserEntityName = be.EntityName;
+      }
+    }
+  
+    public SoftUserEntityName: string = "";  //'IND' 'LEG'
+
+    public SoftUserFirstName: string = "";
+    public SoftUserLastName: string = "";
+    public SoftUserEmail: string = "";
+    public SoftUserPhone: string = "";
+    public SoftUserINN: string = "";
+    public SoftUserActualCountry: string = "";
+    public SoftUserActualCity: string = "";
+    public SoftUserActualAddress: string = "";
+
+    public SoftUserCompName: string = "";
+    public SoftUserCompKPP: string = "";
+    public SoftUserLegalAddress: string = "";
+
+    //Дополнительные данные
+    public PreviousLicenseNumber: string = "";	//- Previous license number.Specified when renewing a license.
+    public OrderComment: string = "";
+    public PaymentCardNumber: string = "";   //Последние 4 цифры номера карты, с которого будет произведена покупка.Для физ.Лиц.
+
+    public OrderCreatedDateTimeSys: Date = new Date(0);
+    public OrderCreatedDateTimeValue: string = "";
+
   // Others
   public Clear()
   {
@@ -233,6 +314,39 @@ export class MyFormValues {
       PaymentMethodID: this.PaymentMethodID,
       PaymentMethodName: this.PaymentMethodName,
       BuyerEntityID: this.BuyerEntityID,
+      BuyerEntityName: this.BuyerEntityName,
+
+      BuyerFirstName: this.BuyerFirstName,
+      BuyerLastName: this.BuyerLastName,
+      BuyerEmail: this.BuyerEmail,
+      BuyerPhone: this.BuyerPhone,
+      BuyerINN: this.BuyerINN,
+      BuyerActualCountry: this.BuyerActualCountry,
+      BuyerActualCity: this.BuyerActualCity,
+      BuyerActualAddress: this.BuyerActualAddress,
+      BuyerCompName: this.BuyerCompName,
+      BuyerCompKPP: this.BuyerCompKPP,
+      BuyerLegalAddress: this.BuyerLegalAddress,
+      BuyerForOtherEntity: this.BuyerForOtherEntity,
+      
+      SoftUserEntityID: this.SoftUserEntityID,
+      SoftUserEntityName: this.SoftUserEntityName,
+      SoftUserFirstName: this.SoftUserFirstName,
+      SoftUserLastName: this.SoftUserLastName,
+      SoftUserEmail: this.SoftUserEmail,
+      SoftUserPhone: this.SoftUserPhone,
+      SoftUserINN: this.SoftUserINN,
+      SoftUserActualCountry: this.SoftUserActualCountry,
+      SoftUserActualCity: this.SoftUserActualCity,
+      SoftUserActualAddress: this.SoftUserActualAddress,
+      SoftUserCompName: this.SoftUserCompName,
+      SoftUserCompKPP: this.SoftUserCompKPP,
+      SoftUserLegalAddress: this.SoftUserLegalAddress,
+      PreviousLicenseNumber: this.PreviousLicenseNumber,
+      OrderComment: this.OrderComment,
+      PaymentCardNumber: this.PaymentCardNumber,
+      OrderCreatedDateTimeSys: this.OrderCreatedDateTimeSys,
+      OrderCreatedDateTimeValue: this.OrderCreatedDateTimeValue,
     }
   }
 

@@ -35,7 +35,7 @@ function ObjectValueAsStringList(fromValues: MyFormValues): string {
   let sysValue = fromValues.toJSON();
 
   for (const [key, value] of Object.entries(sysValue)) {
-    res = res + `[${key}]: '${value}' \n`;
+    res = res + `[${key}] = '${value}' \n`;
     // if (!key.startsWith("_"))
     // {
     //   res = res + `[${key}]: '${value}' \n`;
@@ -84,9 +84,14 @@ async function SendMail(formValues: MyFormValues) : Promise<string> {
   //sendgrid.send(options);
 
   let sendMailHost: string;
-  let isDevelopment: boolean = true; //Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+  let isDevelopment: boolean; //Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+  if (window.location.hostname === 'localhost')
+    isDevelopment = true
+  else  
+    isDevelopment = false;
+
   if (isDevelopment)
-    sendMailHost = "https://localhost:7095/";
+    sendMailHost = "http://localhost:7095/";
   else
     sendMailHost = "https://ehlibdirpayblazorapp.azurewebsites.net/";
 
@@ -114,6 +119,7 @@ async function SendMail(formValues: MyFormValues) : Promise<string> {
     {
       //let result: string = await response.json() as string;
       let result: string =  
+        'sendPath: ' + sendPath + '\n' + 
         'Error code: ' + response.status.toString() + '\n' + 
         await response.text();
       return result;
@@ -121,13 +127,16 @@ async function SendMail(formValues: MyFormValues) : Promise<string> {
 
   } catch (error) {
     if (typeof error === "string") {
-        return error;
+        return 'sendPath: ' + sendPath + '\n' + 
+               error;
     } 
     else if (error instanceof Error) {
-      return error.message;
+      return 'sendPath: ' + sendPath + '\n' + 
+             error.message;
     } 
     else {
       return "Error: Ошибка отправки сообщения. \n" +
+      'sendPath: ' + sendPath + '\n' + 
       "Не удается получить текст ошибки.";
     }
   }

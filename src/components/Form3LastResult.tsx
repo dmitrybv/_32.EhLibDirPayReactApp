@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as BS from "react-bootstrap";
 
-import { GlobalStateType, MyFormValues, EditFormState } from "../data/GlobalState";
+import { MyFormValues, EditFormState } from "../data/GlobalState";
 import * as InputRows from "./InputRows";
 
 interface SignupForm3Ptops {
@@ -44,14 +44,14 @@ const SignupForm3 = (props: SignupForm3Ptops) => {
 
       {/* Общая стоимость заказа: */}
       <InputRows.DisplayTextRow
-        fieldValue={props.FormData.OrderPriceText}
-        labelCaption="Общая стоимость заказа:"
+        FieldValue={props.FormData.OrderPriceText}
+        LabelCaption="Общая стоимость заказа:"
       />
 
       {/* Способ оплаты: */}
       <InputRows.DisplayTextRow
-        fieldValue={props.FormData.PaymentMethodName}
-        labelCaption="Способ оплаты:"
+        FieldValue={props.FormData.PaymentMethodName}
+        LabelCaption="Способ оплаты:"
       />
 
       {/*  */}

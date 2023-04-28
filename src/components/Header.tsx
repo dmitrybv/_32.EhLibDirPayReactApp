@@ -1,5 +1,5 @@
 import * as BS from "react-bootstrap";
-import styles from './Header.module.css';
+//import styles from './Header.module.css';
 import logo from '../assets/ehlib-logo.png';
 
 const Header = () => {

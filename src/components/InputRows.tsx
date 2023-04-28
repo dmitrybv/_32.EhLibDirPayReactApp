@@ -1,6 +1,15 @@
 import * as React from 'react';
-import * as Fmk from 'formik';
+//import * as Fmk from 'formik';
 import * as BS from "react-bootstrap";
+
+function ErrorMessage(props: any): JSX.Element | null {
+  if (props.errorText === undefined) {
+    return null;
+  }
+  else {
+    return (<div className='text-danger'>{props.errorText}</div>);
+  }
+}
 
 export type KeyDisplayValue = {
   key: string;
@@ -12,19 +21,19 @@ export type KeyDisplayValue = {
 //
 export type DisplayTextRowArg =
   {
-    labelCaption: string;
-    fieldValue: string;
+    LabelCaption: string;
+    FieldValue: string;
   }
 
 export function DisplayTextRow(props: DisplayTextRowArg): JSX.Element {
   return (
     <BS.Row className='mb-2'>
-      <BS.Col md={4} className='mt-2'>
-        <label>{props.labelCaption}</label>
+      <BS.Col md={4} className='mt-1'>
+        <label>{props.LabelCaption}</label>
       </BS.Col>
 
-      <BS.Form.Group as={BS.Col} md={8}>
-        <label><b>{props.fieldValue}</b></label>
+      <BS.Form.Group as={BS.Col} md={8} className='mt-1'>
+        <label><b>{props.FieldValue}</b></label>
       </BS.Form.Group>
     </BS.Row>
   );
@@ -36,25 +45,39 @@ export function DisplayTextRow(props: DisplayTextRowArg): JSX.Element {
 
 export type InputTextRowArg =
   {
-    fieldName: string;
-    labelCaption: string;
+    FieldName: string;
+    LabelCaption: string;
+    PlaceHolder?: string;
     formikProps: any;
+    Required?: boolean;
     editControlSubs?: JSX.Element | null;
+    inputType?: string;
   }
 
 export function InputTextRow(props: InputTextRowArg): JSX.Element {
   let editControl: JSX.Element | null;
+  let inputType: string = 'text' 
+  let errorText = props.formikProps.errors[props.FieldName];
+   
+  if (props.formikProps.values[props.FieldName] === undefined)
+    throw Error(`function InputTextRow: "${props.FieldName}" does not exists! `);   
+
+  if (props.inputType === 'number' )
+  {
+    inputType = 'number';
+  }
 
   if (props.editControlSubs === undefined) {
     editControl = (
       <BS.Form.Control
         className='form-control form-control-sm'
-        id={props.fieldName}
-        name={props.fieldName}
-        type="text"
+        id={props.FieldName}
+        name={props.FieldName}
+        placeholder={props.PlaceHolder}
+        type={inputType}
         onChange={props.formikProps.handleChange}
-        value={props.formikProps.values[props.fieldName]}
-        isInvalid={!(props.formikProps.errors[props.fieldName] === undefined)}
+        value={props.formikProps.values[props.FieldName]}
+        isInvalid={!(props.formikProps.errors[props.FieldName] === undefined)}
       />
     );
   }
@@ -65,16 +88,19 @@ export function InputTextRow(props: InputTextRowArg): JSX.Element {
   return (
     <BS.Row className='mb-2'>
       <BS.Col md={4} className='mt-2'>
-        <label htmlFor={props.fieldName}>{props.labelCaption}</label>
+        <label htmlFor={props.FieldName}>{props.LabelCaption}</label>
+        { (props.Required) ? <span className="text-danger">&nbsp;*</span> : null }
       </BS.Col>
 
       <BS.Form.Group as={BS.Col} md={8}>
 
         {editControl}
 
-        <Fmk.ErrorMessage name={props.fieldName}>
+        <ErrorMessage errorText={errorText} />
+
+        {/* <Fmk.ErrorMessage name={props.FieldName}>
           {msg => (<div className='text-danger'>{msg}</div>)}
-        </Fmk.ErrorMessage>
+        </Fmk.ErrorMessage> */}
 
       </BS.Form.Group>
     </BS.Row>
@@ -126,23 +152,13 @@ export function InputComboboxRow(props: InputComboboxRowArg): JSX.Element {
     props.formikProps.handleChange(e);
   }
 
-  function ErrorMessage(props: any): JSX.Element | null {
-    if (props.errorText === undefined) {
-      return null;
-    }
-    else {
-      return (<div className='text-danger'>{props.errorText}</div>);
-    }
-
-  }
-
   let errorText = props.formikProps.errors[props.fieldName];
 
   return (
     <BS.Row className='mb-2'>
       <BS.Col md={4} className='mt-2'>
         <label htmlFor={props.fieldName}>{props.labelCaption}</label>
-        <span className='text-danger'> *</span>
+        <span className='text-danger'>&nbsp;*</span>
       </BS.Col>
 
       <BS.Form.Group as={BS.Col} md={8}>

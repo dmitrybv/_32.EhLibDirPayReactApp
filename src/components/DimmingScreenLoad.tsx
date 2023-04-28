@@ -1,23 +1,8 @@
 import React from 'react';
+
 import styles from './DimmingScreenLoad.module.css';
-
-//  const DivStyle = {
-//    background: "#000",
-//    opacity: "0.0",
-//    position: "fixed", /* important to use fixed, not absolute */
-//    top: "0",
-//    left: "0",
-//    width: "100%",
-//    height: "100%",
-//    display: "none",
-//    zIndex: "9999", /* may not be necessary */
-//  };
-
-//  const DivStyleShow = {
-//   display: "block !important",
-//   animation: "visibleKeyFr 0.3s forwards",
-// }
-
+import { Spinner } from 'react-bootstrap';
+ 
 type DimmingScreenLoadArg =
   {
     Show: boolean;
@@ -25,15 +10,30 @@ type DimmingScreenLoadArg =
 
 export function DimmingScreenLoad(props: DimmingScreenLoadArg): JSX.Element {
 
+  //const [dimmerVisible, updateDimmerVisible] = React.useState(false);
+  //const dimmerVisible = React.useRef(false);
+  const selfRef = React.useRef<HTMLDivElement>(null);
+
   let className = styles.dimmer;
   if (props.Show === true)
   {
-    className = className + ' ' + styles.dimmer_show;
+    className = className + ' ' + styles['dimmer-show'];
+    //dimmerVisible.current  = true;
+    //updateDimmerVisible(true);
+  }
+  //else if(props.Show === false /*&& dimmerVisible.current === true*/)
+  else if(props.Show === false && 
+          selfRef.current !== null && 
+          selfRef.current.clientWidth )
+  {
+    className = className + ' ' + styles['dimmer-hide'];
+    //updateDimmerVisible(false);
+    //dimmerVisible.current  = false;
   }
 
   return (
-    <div className= {className}>
-      Text
+    <div ref={selfRef} className= {className}>
+      <Spinner className={styles['spinner-center']} animation="border" />
     </div>
   );
 }  

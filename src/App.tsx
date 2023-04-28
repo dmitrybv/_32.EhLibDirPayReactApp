@@ -1,13 +1,13 @@
 import * as BS from "react-bootstrap";
 import React from 'react';
 //import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 
 import Form1EnterData from './components/Form1EnterData'
 import Form2CheckSendData from './components/Form2CheckSendData'
 import Form3LastResult from './components/Form3LastResult'
 import Header from './components/Header'
-import { GlobalStateType, MyFormValues, EditFormState } from "./data/GlobalState";
+import { GlobalStateType, EditFormState } from "./data/GlobalState";
 
 let GlobalState: GlobalStateType = new GlobalStateType();
 
